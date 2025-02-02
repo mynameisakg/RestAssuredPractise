@@ -57,7 +57,7 @@ public class FetchResponseDataConcept {
                 //header is not needed for this get call but we can add that too..
                     .header("Authorization", "dd10d5b9022a5542f410f62ca7b8a3126ce9493b0a5d14a180d53e77b8631203")
                         .when()
-                            .get("/public/v2/users/7673096");
+                            .get("/public/v2/users/7673077");
 
         System.out.println("Status Code is : " + response.statusCode());
         System.out.println("Status Line is : " + response.statusLine());
@@ -90,7 +90,7 @@ public class FetchResponseDataConcept {
         List<Integer> usersId = js.getList("id");
         System.out.println(usersId);
 
-        Assert.assertTrue(usersId.contains(7673089));
+        Assert.assertTrue(usersId.contains(7673077));
 
         List<String> names = js.getList("name");
         System.out.println(names);
