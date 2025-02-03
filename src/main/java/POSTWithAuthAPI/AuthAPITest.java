@@ -76,6 +76,7 @@ public class AuthAPITest {
         }
     }
 
+    //WIP
     @Test
     public void getAuthTokenTest_WithPOJOClass() {
         //POJO- Plain old Java object
@@ -83,7 +84,7 @@ public class AuthAPITest {
         //file, create a folder.
         //Earlier in RA, with body(Object obj) method, the seraialization i.e
         //conversion of pojo to json would take place automatically but with recent
-        //RA we have to use Object Mapper class i.e. Jackson Databind.
+        //RA we have to use Object Mapper class i.e. Jackson Databind,GSON, etc.
         //Object Mapper will convert POJO to Json.
         RestAssured.baseURI = "https://restful-booker.herokuapp.com";
 
@@ -94,7 +95,7 @@ public class AuthAPITest {
             String tokenID =
                     given().log().all()
                             .contentType(ContentType.JSON)
-                            .body(cred) //pojo to json
+                            .body(cred) //pojo to json : serialization: ObjectMapper(Jackson)
                             .when().log().all()
                             .post("/auth")
                             .then().log().all()
@@ -109,6 +110,8 @@ public class AuthAPITest {
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Exception occurred: " + e.getMessage());
+
+            //json ----> pojo: De-serialization
         }
     }
 }
