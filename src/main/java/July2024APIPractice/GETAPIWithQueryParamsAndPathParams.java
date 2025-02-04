@@ -155,7 +155,7 @@ public class GETAPIWithQueryParamsAndPathParams {
                 .then().log().all()
                 .assertThat()
                 .statusCode(200)
-//                .body("title", equalTo("Substantia caterva alo odit animus.")); //This will not work for json array will only work for json object
+//                .body("title", equalTo("Substantia caterva alo odit animus.")); //This will not work for json array, it will only work for json object
                 .body("title", hasItem("Substantia caterva alo odit animus."));
     }
 }
