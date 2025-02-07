@@ -178,6 +178,35 @@ public class BookingApiFeatureTests {
 
     }
 
+    @Test
+    public void deleteBookingTest(){
+        int newBookingId = createBookingId();
+
+        RestAssured.baseURI = "https://restful-booker.herokuapp.com";
+        //REMEMBER --- Arrange, Act & Assert (AAA pattern)
+
+        given()
+                .pathParam("bookingId", newBookingId)
+                .when()
+                .get("/booking/{bookingId}")
+                .then()
+                .assertThat()
+                .statusCode(200);
+
+        //delete starts from here
+        given().log().all()
+            .pathParam("bookingId", newBookingId)
+                .contentType(ContentType.JSON)
+                    .header("Accept", "application/json")
+                        .header("Cookie","token="+tokenId)
+                            .when().log().all()
+                                .delete("/booking/{bookingId}")
+                                    .then().log().all()
+                                        .assertThat()
+                                            .statusCode(201);
+
+    }
+
     public int createBookingId(){
         RestAssured.baseURI = "https://restful-booker.herokuapp.com";
         int bookingId =
