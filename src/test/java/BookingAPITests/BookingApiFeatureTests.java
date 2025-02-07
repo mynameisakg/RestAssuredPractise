@@ -13,7 +13,6 @@ import java.io.File;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 
 public class BookingApiFeatureTests {
 
@@ -83,7 +82,100 @@ public class BookingApiFeatureTests {
 
     @Test
     public void createBookingTest(){
+
         Assert.assertNotNull(createBookingId());
+
+    }
+
+    @Test
+    public void updateBookingTest(){
+        int newBookingId = createBookingId();
+
+        RestAssured.baseURI = "https://restful-booker.herokuapp.com";
+
+        //get booking id is an additional step to check if booking ID has been
+        //created in the DB or not. If not we will get to know before making any
+        //update. However this is an optional step.
+        //REMEMBER --- Arrange, Act & Assert (AAA pattern)
+
+        given()
+            .pathParam("bookingId", newBookingId)
+                .when()
+                    .get("/booking/{bookingId}")
+                        .then()
+                            .assertThat()
+                                    .statusCode(200);
+
+        //update starts from here
+        given().log().all()
+                .pathParam("bookingId", newBookingId)
+                .contentType(ContentType.JSON)
+                .header("Accept", "application/json")
+                .header("Cookie","token="+tokenId)
+                .body("{\n" +
+                        "    \"firstname\" : \"James\",\n" +
+                        "    \"lastname\" : \"Brown\",\n" +
+                        "    \"totalprice\" : 111,\n" +
+                        "    \"depositpaid\" : true,\n" +
+                        "    \"bookingdates\" : {\n" +
+                        "        \"checkin\" : \"2018-01-01\",\n" +
+                        "        \"checkout\" : \"2019-01-01\"\n" +
+                        "    },\n" +
+                        "    \"additionalneeds\" : \"Breakfast\"\n" +
+                        "}")
+                .when().log().all()
+                .put("/booking/{bookingId}")
+                .then().log().all()
+                .assertThat()
+                .statusCode(200)
+                .and()
+                .body("firstname", equalTo("James"))
+                .and()
+                .body("additionalneeds", equalTo("Breakfast"));
+
+    }
+
+    @Test
+    public void partialUpdateBookingTest(){
+        int newBookingId = createBookingId();
+
+        RestAssured.baseURI = "https://restful-booker.herokuapp.com";
+
+        //get booking id is an additional step to check if booking ID has been
+        //created in the DB or not. If not we will get to know before making any
+        //update. However this is an optional step.
+        //REMEMBER --- Arrange, Act & Assert (AAA pattern)
+
+        given()
+                .pathParam("bookingId", newBookingId)
+                .when()
+                .get("/booking/{bookingId}")
+                .then()
+                .assertThat()
+                .statusCode(200);
+
+        //update starts from here
+        given().log().all()
+                .pathParam("bookingId", newBookingId)
+                .contentType(ContentType.JSON)
+                .header("Accept", "application/json")
+                .header("Cookie","token="+tokenId)
+                .body("{\n" +
+                        "    \"firstname\" : \"Test\",\n" +
+                        "    \"lastname\" : \"APIAutomation\"\n" +
+                        "}")
+                .when().log().all()
+                .patch("/booking/{bookingId}")
+                .then().log().all()
+                .assertThat()
+                .statusCode(200)
+                .and()
+                .body("firstname", equalTo("Test"))
+                .and()
+                .body("lastname", equalTo("APIAutomation"))
+                .and()
+                .body("additionalneeds", equalTo("Breakfast"));
+
     }
 
     public int createBookingId(){
