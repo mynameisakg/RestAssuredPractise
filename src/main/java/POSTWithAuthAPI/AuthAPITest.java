@@ -95,7 +95,7 @@ public class AuthAPITest {
             String tokenID =
                     given().log().all()
                             .contentType(ContentType.JSON)
-                            .body(cred) //pojo to json : serialization: ObjectMapper(Jackson)
+                            .body(cred) //pojo to json : serialization: ObjectMapper(Jackson databind)
                             .when().log().all()
                             .post("/auth")
                             .then().log().all()
