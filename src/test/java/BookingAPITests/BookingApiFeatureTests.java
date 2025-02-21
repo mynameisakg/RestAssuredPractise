@@ -7,6 +7,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -17,6 +18,19 @@ import static io.restassured.RestAssured.given;
 public class BookingApiFeatureTests {
 
     String tokenId;
+
+    @BeforeSuite
+    public void getServerStatus(){
+        RestAssured.baseURI = "https://restful-booker.herokuapp.com";
+
+        given().log().all()
+                .when().log().all()
+                .get("/ping")
+                .then().log().all()
+                .assertThat()
+                .body(equalTo("Created"));
+
+    }
 
     @BeforeMethod
     public void getToken(){
