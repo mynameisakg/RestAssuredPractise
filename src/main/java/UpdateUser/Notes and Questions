@@ -1,0 +1,253 @@
+Summary of Concepts (Interview Point of View)
+
+POJO (Plain Old Java Object):
+    A POJO is a simple Java class that encapsulates data and provides getters and setters for accessing and modifying the data.
+    Example: Users class in the code.
+    POJOs are used to represent entities in applications, especially in REST APIs, where they map to JSON/XML request/response bodies.
+
+Lombok:
+    Lombok is a library that reduces boilerplate code in Java by automatically generating getters, setters, constructors, and more using annotations.
+    Example: UserLombok class uses Lombok annotations like @Data, @Builder, @AllArgsConstructor, and @NoArgsConstructor.
+    @Data: Generates getters, setters, toString, equals, and hashCode.
+    @Builder: Provides a builder pattern for object creation.
+    @AllArgsConstructor and @NoArgsConstructor: Generate constructors with all fields and no fields, respectively.
+
+Builder Pattern:
+    A creational design pattern that allows for the step-by-step construction of complex objects.
+    Example: UserLombok.UserLombokBuilder() is used to create a UserLombok object in a readable and flexible way.
+
+REST Assured:
+    A Java library for testing RESTful APIs.
+    Used to send HTTP requests (GET, POST, PATCH, etc.) and validate responses.
+    Example: The UpdateUserWithPOJO class uses REST Assured to create and update users via API calls.
+
+API Testing:
+    The process of testing APIs to ensure they function as expected.
+    Includes validating status codes, response bodies, headers, etc.
+    Example: The updateUserWith_POJO method validates the response status code and body after updating a user.
+
+Random Data Generation:
+    Generating unique data (e.g., email IDs) for testing purposes to avoid conflicts.
+    Example: getRandomUserEmailId() method generates a unique email using the current timestamp.
+
+Assertions:
+    Used to validate expected outcomes in tests.
+    Example: REST Assured's then().assertThat() is used to validate the response status code and body.
+
+JSON Path:
+    A way to extract specific data from JSON responses.
+    Example: response.jsonPath().getInt("id") extracts the user ID from the API response.
+
+Questions-
+
+POJO and Lombok
+
+1)  What is a POJO? How is it different from a Java Bean?
+    Answer: A POJO (Plain Old Java Object) is a simple Java class with private fields, public getters/setters, and no business logic. A Java Bean is a special type of POJO that is serializable, has a no-arg constructor, and uses getter/setter methods.
+    Example:
+    // POJO
+    public class User {
+        private String name;
+        private String email;
+        // Getters and Setters
+    }
+
+2)  What are the advantages of using Lombok in a Java project?
+    Answer: Lombok reduces boilerplate code by automatically generating getters, setters, constructors, toString, equals, and hashCode methods. It improves code readability and maintainability.
+    Example:
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class User {
+        private String name;
+        private String email;
+    }
+
+3)  Explain the purpose of the @Data, @Builder, @AllArgsConstructor, and @NoArgsConstructor annotations in Lombok.
+    Answer:
+    @Data: Generates getters, setters, toString, equals, and hashCode.
+    @Builder: Implements the Builder pattern for object creation.
+    @AllArgsConstructor: Generates a constructor with all fields.
+    @NoArgsConstructor: Generates a no-argument constructor.
+    Example:
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class User {
+        private String name;
+        private String email;
+    }
+
+4)  How does the Builder pattern improve object creation in Java? Can you write a simple example?
+    Answer: The Builder pattern allows for step-by-step object creation, making the code more readable and flexible, especially for objects with many fields.
+    Example:
+    User user = User.builder()
+                    .name("John")
+                    .email("john@example.com")
+                    .build();
+
+5)  What are the potential drawbacks of using Lombok in a project?
+    Answer:
+    Reduced readability for developers unfamiliar with Lombok.
+    Dependency on Lombok annotations, which may cause issues if Lombok is removed.
+    Debugging can be harder because generated code is not visible in the source file.
+    REST Assured and API Testing
+
+6)  What is REST Assured, and why is it used in API testing?
+    Answer: REST Assured is a Java library for testing RESTful APIs. It simplifies sending HTTP requests and validating responses.
+    Example:
+    given().contentType(ContentType.JSON)
+           .when().get("/users")
+           .then().statusCode(200);
+
+7)  How do you validate the status code and response body in REST Assured?
+    Answer: Use then().statusCode() for status code validation and body() for response body validation.
+    Example:
+    given().contentType(ContentType.JSON)
+           .when().get("/users/1")
+           .then().statusCode(200)
+           .body("name", equalTo("John"));
+
+8)  What is the difference between POST and PATCH HTTP methods? When would you use each?
+    Answer:
+    POST: Used to create a new resource.
+    PATCH: Used to partially update an existing resource.
+    Example:
+    // POST to create a user
+    given().body(user).when().post("/users");
+
+    // PATCH to update a user
+    given().body(updatedUser).when().patch("/users/1");
+
+9)  How do you handle authentication (e.g., Bearer Token) in REST Assured?
+    Answer: Use the header() method to add an authorization header.
+    Example:
+    given().header("Authorization", "Bearer token")
+           .when().get("/users");
+
+10) What is JSON Path, and how is it used in API testing?
+    Answer: JSON Path is a query language for JSON used to extract specific data from JSON responses.
+    Example:
+    int userId = response.jsonPath().getInt("id");
+    General Testing Concepts
+
+11) How do you generate unique data for testing purposes? Can you provide an example?
+    Answer: Use timestamps or random number generators to create unique data.
+    Example:
+    String email = "user" + System.currentTimeMillis() + "@example.com";
+
+12) What are assertions, and why are they important in testing?
+    Answer: Assertions validate expected outcomes in tests. They ensure the code behaves as expected.
+    Example:
+    assertThat(response.getStatusCode(), equalTo(200));
+
+13) How do you handle dynamic data (e.g., user IDs) in API testing?
+    Answer: Extract dynamic data from the response using JSON Path and reuse it in subsequent requests.
+    Example:
+    int userId = response.jsonPath().getInt("id");
+    given().pathParam("id", userId).when().get("/users/{id}");
+
+14) What is the difference between unit testing and API testing?
+    Answer:
+    Unit testing tests individual components or methods in isolation.
+    API testing tests the functionality, reliability, and performance of APIs.
+
+15) How would you test a scenario where an API returns a large JSON response?
+    Answer: Use JSON Path to extract and validate specific fields instead of validating the entire response.
+    Example:
+    java
+    Copy
+    response.then().body("users[0].name", equalTo("John"));
+    Coding and Design
+
+16) Write a POJO class for a Product entity with fields like id, name, price, and category.
+    Example:
+    public class Product {
+        private int id;
+        private String name;
+        private double price;
+        private String category;
+        // Getters and Setters
+    }
+
+17) Convert the Product POJO class to use Lombok annotations.
+    Example:
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class Product {
+        private int id;
+        private String name;
+        private double price;
+        private String category;
+    }
+
+18) Write a REST Assured test to create a new user and validate the response.
+    Example:
+    User user = new User("John", "john@example.com");
+    given().body(user).when().post("/users")
+           .then().statusCode(201)
+           .body("name", equalTo("John"));
+
+19) How would you refactor the UpdateUserWithPOJO class to make it more maintainable?
+    Answer:
+    Extract reusable methods (e.g., for creating users, updating users).
+    Use constants for repeated values (e.g., base URI, auth token).
+    Add logging for better debugging.
+
+20) Explain how you would implement the Builder pattern without using Lombok.
+    Example:
+    public class User {
+        private String name;
+        private String email;
+
+        private User(UserBuilder builder) {
+            this.name = builder.name;
+            this.email = builder.email;
+        }
+
+        public static class UserBuilder {
+            private String name;
+            private String email;
+
+            public UserBuilder setName(String name) {
+                this.name = name;
+                return this;
+            }
+
+            public UserBuilder setEmail(String email) {
+                this.email = email;
+                return this;
+            }
+
+            public User build() {
+                return new User(this);
+            }
+        }
+    }
+
+Advanced Concepts
+
+21) How do you handle API rate limiting in your tests?
+    Answer: Use retry mechanisms or delay between requests to avoid hitting rate limits.
+
+22) What are some common challenges in API testing, and how do you overcome them?
+    Answer:
+    Dynamic data: Use JSON Path to extract and reuse data.
+    Authentication: Use tokens or OAuth.
+    Rate limiting: Implement retries or delays.
+
+23) How would you mock an API response for testing purposes?
+    Answer: Use tools like WireMock or Mockito to simulate API responses.
+    Example:
+    stubFor(get("/users").willReturn(aResponse().withStatus(200)));
+
+24) What is the difference between ContentType.JSON and ContentType.XML in REST Assured?
+    Answer: ContentType.JSON is used for JSON payloads, while ContentType.XML is used for XML payloads.
+
+25) How do you ensure your API tests are reliable and not flaky?
+    Answer:
+    Use unique data for each test.
+    Clean up test data after tests.
+    Add retries for transient failures.

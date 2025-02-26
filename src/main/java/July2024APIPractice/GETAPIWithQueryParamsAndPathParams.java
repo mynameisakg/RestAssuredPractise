@@ -137,7 +137,7 @@ public class GETAPIWithQueryParamsAndPathParams {
     @DataProvider
     public Object[][] getUserId_ForHasItemMethod(){
         return new Object[][]{
-                {"7673098"}
+                {"7491701"}
         };
 
     }
@@ -156,6 +156,6 @@ public class GETAPIWithQueryParamsAndPathParams {
                 .assertThat()
                 .statusCode(200)
 //                .body("title", equalTo("Substantia caterva alo odit animus.")); //This will not work for json array, it will only work for json object
-                .body("title", hasItem("Substantia caterva alo odit animus."));
+                .body("title", hasItem("Hic ancilla adinventitias suffragium vulticulus."));
     }
 }

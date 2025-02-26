@@ -4,12 +4,12 @@ package Pojo;
 2) For creating a java file, create a package. For creating a non java
 file, create a folder.
 3) Pojo class can not extend/implement anything
-4) private data fields (variables).
+4) private data fields (variables). ***Remember This***
 5) public getters/setters for accessing variables (ENCAPSULATION)
 6) public constructor.
 
  */
-public class Credentials {
+public class  Credentials {
 
     private String username;
     private String password;
