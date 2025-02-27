@@ -1,5 +1,6 @@
 package FakeUserAPITests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -66,6 +67,7 @@ public class User {
         @NoArgsConstructor
         public static class Geolocation {
             private String lat;
+            @JsonProperty("long")
             private String longitude;
         }
     }
