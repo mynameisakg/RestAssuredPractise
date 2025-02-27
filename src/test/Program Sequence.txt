@@ -2,3 +2,15 @@ July2024APIPractice
     1) ProductsAPI
     2) ContactsAPITest
     3) GETAPIWithQueryParamsAndPathParams
+
+
+    Lesson4
+        - Package creation - UpdateUser
+            -Users
+            -UpdateUserWithPOJO
+            -UserLombok
+        - Package creation - FakeUserAPITest
+            -User
+            -CreateFakeUserTest
+
+
